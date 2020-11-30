@@ -81,7 +81,7 @@ plt.xlabel('Time (s)')
 plt.ylabel('Angle (rad)')
 plt.grid()
 plt.show()
-'''
+
 # DETERMINE THE IMPULSE RESPONSE OF THE SYSTEM (kick)
 # F(s) = 1, X1(s) = G_x, x1(t) = inv_lap(x1)
 x1_t = sym.inverse_laplace_transform(G_x, s, t)
@@ -89,15 +89,17 @@ print(sym.latex(x1_t))
 sym.pprint(G_x)
 # unfortunately I seem to be getting a bad result here as it cannot be computed in the
 # c.impulse_response()
-'''
+
 # DETERMINE THE STEP RESPONSE OF THE SYSTEM (push)
 x3_step_t = sym.inverse_laplace_transform(G_x/s, s, t)
 sym.pprint(x3_step_t)
-
+print(sym.latex(x3_step_t))
+'''
 # DETERMINE THE FREQUENCY RESPONSE OF THE SYSTEM (shake)
 w = sym.symbols('w', real=True, positive=True)
 x3_freq_t = sym.inverse_laplace_transform(G_x*w**2/(s**2 + w**2), s, t)
 sym.pprint(x3_freq_t.simplify())
+print(sym.latex(x3_freq_t))
 '''
 t_imp, x3_imp = C.impulse_response(G_x)
 plt.plot(t_imp, x3_imp)
@@ -105,3 +107,4 @@ plt.xlabel('Time (s)')
 plt.ylabel('Angle (rad)')
 plt.grid()
 plt.show()
+'''
