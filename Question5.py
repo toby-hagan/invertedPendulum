@@ -70,11 +70,23 @@ Kp = 10
 Ki = 0.1
 Kd = 2
 
-G_c = -C.TransferFunction([Kd, Kp, Ki], [1, 0])
-G_d = C.feedback(G_theta, G_c)
 
-t_imp, x3_imp = C.impulse_response(G_d)
-plt.plot(t_imp, (x3_imp*180)/np.pi)
+def pid(kp, ki, kd):
+    diff = C.TransferFunction([1, 0], 1)
+    intgr = C.TransferFunction(1, [1, 0])
+    pid_tf = kp + kd * diff + ki * intgr
+    return pid_tf
+
+
+controller = -pid(kp=100, ki=15, kd=10)
+G_d = C.feedback(G_theta, controller)
+
+t_final = 1
+num_points = 500
+
+t, y = C.impulse_response(G_d, T=np.linspace(0, t_final, num_points))
+
+plt.plot(t, (y*180)/np.pi)
 plt.xlabel('Time (ms)')
 plt.ylabel('Angle (deg)')
 plt.grid()
